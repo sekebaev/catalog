@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин грузовиков</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .truck-card {
+            border: 1px solid #ddd;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+        .truck-card h2 {
+            margin: 0;
+        }
+        .filters {
+            margin-bottom: 20px;
+        }
+        .filters select {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Каталог грузовиков</h1>
+
+    <div class="filters">
+        <label for="brand">Бренд:</label>
+        <select id="brand">
+            <option value="">Все</option>
+            <option value="Volvo">Volvo</option>
+            <option value="Mercedes">Mercedes</option>
+            <option value="Scania">Scania</option>
+        </select>
+
+        <label for="type">Тип:</label>
+        <select id="type">
+            <option value="">Все</option>
+            <option value="Truck">Грузовик</option>
+        </select>
+
+        <label for="used">Состояние:</label>
+        <select id="used">
+            <option value="">Все</option>
+            <option value="new">Новый</option>
+            <option value="used">Б/У</option>
+        </select>
+
+        <label for="price">Макс. цена:</label>
+        <input type="number" id="price" placeholder="Максимальная цена">
+        <button onclick="applyFilters()">Применить фильтры</button>
+    </div>
+
+    <div id="truck-list">
+        <!-- Список грузовиков будет сюда добавляться динамически -->
+    </div>
+
+    <script>
+        const trucks = [
+            { brand: 'Volvo', type: 'Truck', price: 1500000, used: 'new' },
+            { brand: 'Mercedes', type: 'Truck', price: 1800000, used: 'used' },
+            { brand: 'Scania', type: 'Truck', price: 2000000, used: 'new' },
+            { brand: 'MAN', type: 'Truck', price: 1300000, used: 'used' }
+        ];
+
+        function displayTrucks(trucksToDisplay) {
+            const truckList = document.getElementById('truck-list');
+            truckList.innerHTML = '';
+            trucksToDisplay.forEach(truck => {
+                const truckCard = document.createElement('div');
+                truckCard.className = 'truck-card';
+                truckCard.innerHTML = `<h2>${truck.brand} ${truck.type}</h2>
+                    <p>Цена: ${truck.price} Р</p>
+                    <p>Состояние: ${truck.used === 'new' ? 'Новый' : 'Б/У'}</p>`;
+                truckList.appendChild(truckCard);
+            });
+        }
+
+        function applyFilters() {
+            const brand = document.getElementById('brand').value;
+            const type = document.getElementById('type').value;
+            const used = document.getElementById('used').value;
+            const price = document.getElementById('price').value;
+
+            let filteredTrucks = trucks;
+
+            if (brand) {
+                filteredTrucks = filteredTrucks.filter(truck => truck.brand === brand);
+            }
+
+            if (type) {
+                filteredTrucks = filteredTrucks.filter(truck => truck.type === type);
+            }
+
+            if (used) {
+                filteredTrucks = filteredTrucks.filter(truck => truck.used === used);
+            }
+
+            if (price) {
+                filteredTrucks = filteredTrucks.filter(truck => truck.price <= price);
+            }
+
+            displayTrucks(filteredTrucks);
+        }
+
+        // Покажем все грузовики при загрузке страницы
+        window.onload = function() {
+            displayTrucks(trucks);
+        };
+    </script>
+
+</body>
+</html>
